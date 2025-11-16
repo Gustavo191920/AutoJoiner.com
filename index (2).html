@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Script com Key</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ffeb3b;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(20, 20, 20, 0.95);
+            padding: 40px 35px;
+            border-radius: 16px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(255, 235, 59, 0.1);
+            width: 100%;
+            max-width: 500px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        
+        .logo {
+            font-size: 42px;
+            margin-bottom: 15px;
+            color: #ffeb3b;
+            text-shadow: 0 0 15px rgba(255, 235, 59, 0.3);
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #ffeb3b, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #ffeb3b;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(40, 40, 40, 0.8);
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: #ffeb3b;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #ffeb3b;
+            box-shadow: 0 0 0 2px rgba(255, 235, 59, 0.2);
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ffeb3b;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(45deg, #ffeb3b, #ffd700);
+            color: #000;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 235, 59, 0.4);
+        }
+        
+        .site-btn {
+            background: transparent;
+            color: #ffeb3b;
+            border: 1px solid #ffeb3b;
+        }
+        
+        .site-btn:hover {
+            background: rgba(255, 235, 59, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .code-container {
+            display: none;
+            margin-top: 25px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .code-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        pre {
+            background: rgba(30, 30, 30, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border: 1px solid #444;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: #ffeb3b;
+        }
+        
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: #ffeb3b;
+            border: 1px solid #ffeb3b;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 235, 59, 0.1);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 25px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+            </div>
+            <h1>Key system</h1>
+        </div>
+        
+        <div class="input-group">
+            <label for="scriptKey">SCRIPT_KEY:</label>
+            <div class="input-wrapper">
+                <input type="text" id="scriptKey" placeholder="Cole sua key aqui...">
+                <div class="input-icon">
+                    <i class="fas fa-key"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button class="generate-btn" onclick="gerarScript()">
+                <i class="fas fa-bolt"></i>
+                Gerar Script
+            </button>
+            <button class="site-btn" onclick="irParaSite()">
+                <i class="fas fa-external-link-alt"></i>
+                Obter Key
+            </button>
+        </div>
+        
+        <div id="codeContainer" class="code-container">
+            <div class="code-header">
+                <h3>Seu script com a key:</h3>
+            </div>
+            <pre id="codeOutput"></pre>
+            <button class="copy-btn" onclick="copiarScript()">
+                <i class="far fa-copy"></i>
+                Copiar Script
+            </button>
+        </div>
+        
+        <div class="footer">
+            <p>&nbsp;</p>
+        </div>
+    </div>
+
+    <script>
+        function gerarScript() {
+            const key = document.getElementById('scriptKey').value.trim();
+            
+            if (!key) {
+                alert('Por favor, digite uma key válida!');
+                return;
+            }
+            
+            // Gerar o script com a key inserida entre as aspas
+            const script = `SCRIPT_KEY = "${key}"\nloadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/70bcca43832c5b7255955b520614a215.lua", true))()`;
+            
+            // Mostrar o resultado
+            document.getElementById('codeOutput').textContent = script;
+            document.getElementById('codeContainer').style.display = 'block';
+        }
+        
+        function copiarScript() {
+            const code = document.getElementById('codeOutput').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Script copiado para a área de transferência!');
+            }).catch(err => {
+                console.error('Erro ao copiar:', err);
+                alert('Erro ao copiar o script.');
+            });
+        }
+        
+        function irParaSite() {
+            window.open('https://notifier.estevao1098.com', '_blank');
+        }
+        
+        // Enter para gerar o script
+        document.getElementById('scriptKey').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                gerarScript();
+            }
+        });
+    </script>
+</body>
+</html>
